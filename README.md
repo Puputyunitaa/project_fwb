@@ -2,9 +2,9 @@ Sistem Pengelolaan Stok Barang Jualan Toko
 
 ![Image](https://github.com/user-attachments/assets/b3088b20-7691-4817-a7fc-00c03144bc15)
 
-NAMA	PUPUT YUNNITA
-NIM	     D0223524
-KELAS	INFORMATIKA C
+NAMA	: PUPUT YUNNITA
+NIM	    : D0223524
+KELAS	: INFORMATIKA C
 
 MAKUL : FREMWORK WEB BASED
 
