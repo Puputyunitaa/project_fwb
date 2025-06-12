@@ -16,7 +16,7 @@ class Dashboard extends Controller
         $user = Auth::user();
 
         if ($user->role_id == 1) {
-            return view('tampilan.dashboar', [
+            return view('tampilan.users.dashboard', [
                 'productCount' => Product::count(),
                 'categoryCount' => Category::count(),
                 'supplierCount' => Supplier::count(),

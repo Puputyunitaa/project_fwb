@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -10,61 +11,84 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan daftar semua user (hanya bisa oleh admin)
      */
     public function index()
     {
-        $users = User::with('role')->get();
-        return view('users.index', compact('users'));
+        $role = Auth::user()->role->name;
+
+        if ($role === 'admin') {
+            // Admin ke daftar user
+            return redirect()->route('users.index');
+        } elseif ($role === 'supervisor') {
+            // Supervisor ke dashboard supervisor
+            return view('tampilan.dashboarSupervisior');
+        } elseif ($role === 'staf') {
+            // Staf ke dashboard staf
+            return view('tampilan.dashbaorStaf');
+        } else {
+            abort(403, 'Akses tidak diizinkan');
+        }
     }
 
+    /**
+     * Tampilkan form tambah user
+     */
     public function create()
-    {
-        $roles = Role::all();
-        return view('users.create', compact('roles'));
-    }
+{
+    $roles = Role::all();
+    return view('tampilan.users.create', compact('roles'));
+}
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'role_id' => 'required'
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6',
+        'role_id' => 'required|exists:roles,id',
+    ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role_id' => $request->role_id
-        ]);
+    User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role_id' => $request->role_id,
+    ]);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
-    }
+    return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan');
+}
 
-    public function edit(User $user)
-    {
-        $roles = Role::all();
-        return view('users.edit', compact('user', 'roles'));
-    }
+public function edit($id)
+{
+    $user = User::findOrFail($id);
+    $roles = Role::all();
+    return view('tampilan.users.edit', compact('user', 'roles'));
+}
 
-    public function update(Request $request, User $user)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => "required|email|unique:users,email,{$user->id}",
-            'role_id' => 'required'
-        ]);
+public function update(Request $request, $id)
+{
+    $user = User::findOrFail($id);
 
-        $user->update($request->only(['name', 'email', 'role_id']));
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'role_id' => 'required|exists:roles,id',
+    ]);
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
-    }
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        'role_id' => $request->role_id,
+    ]);
 
-    public function destroy(User $user)
-    {
-        $user->delete();
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
-    }
+    return redirect()->route('users.index')->with('success', 'User berhasil diperbarui');
+}
+
+public function destroy($id)
+{
+    $user = User::findOrFail($id);
+    $user->delete();
+    return redirect()->route('users.index')->with('success', 'User berhasil dihapus');
+}
 }

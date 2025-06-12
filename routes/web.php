@@ -4,11 +4,12 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductSupplierController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-
+Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
 // Auth
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
@@ -16,7 +17,12 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Hanya bisa diakses jika login
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
+    Route::resource('users', UserController::class)->except(['show']);
+    //Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
+
+
+
 
 
     // CRUD Resource routes
