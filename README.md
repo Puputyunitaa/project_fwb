@@ -24,7 +24,7 @@ Lihat dashboard
 Kelola user (tambah, edit, hapus, set role)
 Kelola barang (tambah, edit, hapus)
 Kelola kategori barang
-Input barang masuk & keluar
+tambah barang 
 Lihat semua transaksi
 Lihat stok barang
 Lihat riwayat transaksi
@@ -52,15 +52,6 @@ Lihat riwayat transaksi
 
 ---
 
- ### 🧑 Tabel `roles`
-| Field       | Tipe Data   | Keterangan                         |
-|-------------|-------------|------------------------------------|
-| id          | INT         | Primary key, auto increment        |
-| name        | VARCHAR(50) | Nama role: Admin, Staf, Supervisor |
-| created_at  | TIMESTAMP   | Timestamp otomatis                 |
-| updated_at  | TIMESTAMP   | Timestamp otomatis                 |
-
----
 
 ### 👤 Tabel `users`
 | Field       | Tipe Data     | Keterangan                          |
@@ -136,13 +127,11 @@ Lihat riwayat transaksi
 
 **Relasi Antar Tabel**:
 
-- `users.role_id` → `roles.id` (**Many to One**)
+
 - `products.category_id` → `categories.id` (**Many to One**)
 - `profiles.user_id` → `users.id` (**One to One**)
 - `product_supplier.product_id` → `products.id` (**Many to Many**)
 - `product_supplier.supplier_id` → `suppliers.id` (**Many to Many**)
-Users → Roles (Many to One)
-Setiap pengguna memiliki satu role (Admin, Staf, Supervisor), namun satu role bisa dimiliki banyak pengguna.
 
 Products → Categories (Many to One)
 Setiap produk memiliki satu kategori, tapi satu kategori bisa memiliki banyak produk.

@@ -3,17 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Supplier extends Model
 {
-    use HasFactory;
-
-    protected $fillable = ['name', 'phone', 'address'];
-
-    public function products(): BelongsToMany
+    protected $tablle = 'suppliers';
+    protected $fillable = ['nama_supplier', 'alamat', 'telepon'];
+    public function suplier_produks()
     {
-        return $this->belongsToMany(Product::class, 'product_supplier');
+        return $this->hasMany(Produk_supplier::class);
     }
+
 }

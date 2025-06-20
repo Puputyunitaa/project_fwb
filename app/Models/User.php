@@ -15,17 +15,19 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id', // pastikan ini ada
+        'role',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
-    ];
 
-    public function role()
-{
-    return $this->belongsTo(Role::class);
-}
+    ];
+     // Relasi One to One: User memiliki satu profil
+    public function profile()
+    {
+        return $this->hasOne(Profil::class);
+    }
+    
 
 }
